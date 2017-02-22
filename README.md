@@ -7,7 +7,7 @@ A: We find in units naked twins. It introduces new constraints for other peers. 
 
 # Question 2 (Diagonal Sudoku)
 Q: How do we use constraint propagation to solve the diagonal sudoku problem?  
-A: In order to solve diagonal sudoku, we should add another constraint: if box located on one or both of the diagonals we should check the corresponding values for uniqueness.
+A: In order to solve diagonal sudoku we should add another constraint: if box located on one or both of the diagonals we should check the corresponding values for uniqueness. It’s more challenging task then solving common Sudoku, because instead of checking only peers of the target (items in the same row, column or box) – we also should check the diagonals, which now also must have values in range 1-9, and without duplicates.
 
 ### Install
 

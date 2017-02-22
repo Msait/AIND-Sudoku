@@ -1,3 +1,6 @@
+import logging
+from utils import *
+
 assignments = []
 
 def assign_value(values, box, value):
@@ -30,23 +33,30 @@ def naked_twins(values):
             twins = dict(filter(lambda x: len(x[1]) > 1, count_twins.items()))
             # Eliminate the naked twins as possibilities for their peers
             if len(twins) > 0:
-                for x in twins:
-                    remove_twins_in_unit(twins, unit, values, x)
-
+                remove_twins_in_unit(twins, unit, values)
     return values
 
-def remove_twins_in_unit(twins, unit, values, x):
-    for box in unit:
-        if len(values[box]) > 1 and box not in twins[x]:
-            remove_digits(box, values, x)
+def remove_twins_in_unit(twins, unit, values):
+    """
+    Remove all twins values from box values in given unit
+    :param twins: dict of box value(twins value) and box labels where this values located 
+    :param unit: one of unitlist unit where should  
+    :param values: vc
+    """
+    for x in twins:
+        for box in unit:
+            if len(values[box]) > 1 and box not in twins[x]:
+                remove_digits(box, values, x)
 
 def remove_digits(box, values, digits):
+    """
+    Remove only specific digits from box value
+    :param box: specific box label
+    :param values: dict of box values
+    :param digits: digits to remove in string representation.
+    """
     for digit in digits:
         values[box] = values[box].replace(digit, '')
-
-def cross(A, B):
-    "Cross product of elements in A and elements in B."
-    return [a + b for a in A for b in B]
 
 def grid_values(grid):
     """
@@ -72,18 +82,6 @@ def display(values):
                       for c in cols))
         if r in 'CF': print(line)
     return
-
-rows = 'ABCDEFGHI'
-cols = '123456789'
-boxes = cross(rows, cols)
-row_units = [cross(r, cols) for r in rows]
-column_units = [cross(rows, c) for c in cols]
-square_units = [cross(rs, cs) for rs in ('ABC','DEF','GHI') for cs in ('123','456','789')]
-main_diagonal = [rows[index] + cols[index] for index in range(len(rows))]
-minor_diagonal = [rows[index] + cols[len(rows) - index-1] for index in reversed(range(len(rows)))]
-unitlist = row_units + column_units + square_units + [main_diagonal, minor_diagonal]
-units = dict((s, [u for u in unitlist if s in u]) for s in boxes)
-peers = dict((s, set(sum(units[s],[]))-set([s])) for s in boxes)
 
 def eliminate(values):
     elimination_dict = [k for k in values if len(values[k]) == 1]
@@ -159,6 +157,7 @@ def solve(grid):
 
 if __name__ == '__main__':
     diag_sudoku_grid = '2.............62....1....7...6..8...3...9...7...6..4...4....8....52.............3'
+    display(grid_values(diag_sudoku_grid))
     display(solve(diag_sudoku_grid))
 
     try:
